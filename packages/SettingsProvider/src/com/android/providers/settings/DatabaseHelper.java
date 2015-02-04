@@ -1830,8 +1830,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         /************* The following are CM-12.0 changes ************/
 
         if (upgradeVersion < 114) {
+            String[] qsTiles = new String[] {
+                    Settings.Secure.QS_TILES,
+                    Settings.Secure.QS_USE_MAIN_TILES
+            };
+
             moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
-                    new String[] { Settings.Secure.VOLUME_LINK_NOTIFICATION }, true);
+                    qsTiles, true);
             upgradeVersion = 114;
         }
 
