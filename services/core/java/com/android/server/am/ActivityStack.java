@@ -808,8 +808,11 @@ final class ActivityStack {
     final boolean startPausingLocked(boolean userLeaving, boolean uiSleeping, boolean resuming,
             boolean dontWait) {
         if (mPausingActivity != null) {
-            Slog.wtf(TAG, "Going to pause when pause is already pending for " + mPausingActivity);
-            completePauseLocked(false);
+            Slog.wtf(TAG, "Going to pause when pause is already pending for " + mPausingActivity
+                    + " state=" + mPausingActivity.state);
+            if (mPausingActivity.state == ActivityState.PAUSING) {
+                completePauseLocked(false);
+            }
         }
         ActivityRecord prev = mResumedActivity;
         if (prev == null) {
@@ -1602,6 +1605,7 @@ final class ActivityStack {
         mStackSupervisor.mGoingToSleepActivities.remove(next);
         next.sleeping = false;
         mStackSupervisor.mWaitingVisibleActivities.remove(next);
+        next.waitingVisible = false;
 
         if (DEBUG_SWITCH) Slog.v(TAG, "Resuming " + next);
 
@@ -1934,9 +1938,31 @@ final class ActivityStack {
         return true;
     }
 
+    private TaskRecord getNextTask(TaskRecord targetTask) {
+        final int index = mTaskHistory.indexOf(targetTask);
+        if (index >= 0) {
+            final int numTasks = mTaskHistory.size();
+            for (int i = index + 1; i < numTasks; ++i) {
+                TaskRecord task = mTaskHistory.get(i);
+                if (task.userId == targetTask.userId) {
+                    return task;
+                }
+            }
+        }
+        return null;
+    }
+
     private void insertTaskAtTop(TaskRecord task) {
+        // If the moving task is over home stack, transfer its return type to next task
+        if (task.isOverHomeStack()) {
+            final TaskRecord nextTask = getNextTask(task);
+            if (nextTask != null) {
+                nextTask.setTaskToReturnTo(task.getTaskToReturnTo());
+            }
+        }
+
         // If this is being moved to the top by another activity or being launched from the home
-        // activity, set mOnTopOfHome accordingly.
+        // activity, set mTaskToReturnTo accordingly.
         if (isOnHomeDisplay()) {
             ActivityStack lastStack = mStackSupervisor.getLastStack();
             final boolean fromHome = lastStack.isHomeStack();
@@ -2324,7 +2350,7 @@ final class ActivityStack {
                     // In this case, we want to finish this activity
                     // and everything above it, so be sneaky and pretend
                     // like these are all in the reply chain.
-                    end = numActivities - 1;
+                    end = activities.size() - 1;
                 } else if (replyChainEnd < 0) {
                     end = i;
                 } else {
@@ -2557,8 +2583,23 @@ final class ActivityStack {
             ActivityRecord next = topRunningActivityLocked(null);
             if (next != r) {
                 final TaskRecord task = r.task;
-                if (r.frontOfTask && task == topTask() && task.isOverHomeStack()) {
-                    mStackSupervisor.moveHomeStackTaskToTop(task.getTaskToReturnTo());
+                if ((next == null || next.task != task) && r.frontOfTask) {
+                    if (task.isOverHomeStack() && task == topTask()) {
+                        mStackSupervisor.moveHomeStackTaskToTop(task.getTaskToReturnTo());
+                    } else {
+                        for (int taskNdx = mTaskHistory.size() - 1; taskNdx >= 0; --taskNdx) {
+                            final TaskRecord tr  = mTaskHistory.get(taskNdx);
+                            if (tr.getTopActivity() == null) {
+                                if (tr.isOverHomeStack()) {
+                                    mStackSupervisor.moveHomeStackTaskToTop(
+                                        task.getTaskToReturnTo());
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             ActivityRecord top = mStackSupervisor.topRunningActivityLocked();
@@ -2862,6 +2903,7 @@ final class ActivityStack {
         mStackSupervisor.mStoppingActivities.remove(r);
         mStackSupervisor.mGoingToSleepActivities.remove(r);
         mStackSupervisor.mWaitingVisibleActivities.remove(r);
+        r.waitingVisible = false;
         if (mResumedActivity == r) {
             mResumedActivity = null;
         }
@@ -3062,6 +3104,7 @@ final class ActivityStack {
         // down to the max limit while they are still waiting to finish.
         mStackSupervisor.mFinishingActivities.remove(r);
         mStackSupervisor.mWaitingVisibleActivities.remove(r);
+        r.waitingVisible = false;
 
         // Remove any pending results.
         if (r.finishing && r.pendingResults != null) {
@@ -3643,6 +3686,15 @@ final class ActivityStack {
         if (DEBUG_TRANSITION) Slog.v(TAG,
                 "Prepare to back transition: task=" + taskId);
 
+        boolean prevIsHome = false;
+        if (tr.isOverHomeStack()) {
+            final TaskRecord nextTask = getNextTask(tr);
+            if (nextTask != null) {
+                nextTask.setTaskToReturnTo(tr.getTaskToReturnTo());
+            } else {
+                prevIsHome = true;
+            }
+        }
         mTaskHistory.remove(tr);
         mTaskHistory.add(0, tr);
         updateTaskMovement(tr, false);
@@ -3678,7 +3730,8 @@ final class ActivityStack {
         }
 
         final TaskRecord task = mResumedActivity != null ? mResumedActivity.task : null;
-        if (task == tr && tr.isOverHomeStack() || numTasks <= 1 && isOnHomeDisplay()) {
+        if (prevIsHome || task == tr && tr.isOverHomeStack()
+                || numTasks <= 1 && isOnHomeDisplay()) {
             if (!mService.mBooting && !mService.mBooted) {
                 // Not ready yet!
                 return false;
