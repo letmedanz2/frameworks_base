@@ -135,13 +135,10 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     private float mCurrentT;
     private boolean mShowingDetail;
-
-    private SettingsObserver mSettingsObserver;
     private boolean mShowBatteryText;
     private boolean mShowBatteryTextExpanded;
     private boolean mShowBatteryTextCharging;
     private boolean mBatteryIsCharging;
-    private boolean mShowWeather;
     private int mBatteryChargeLevel;
 
     public void updateBatteryIconSettings() {
@@ -149,6 +146,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         updateVisibilities();
         requestCaptureValues();
     };
+
+    private SettingsObserver mSettingsObserver;
+    private boolean mShowWeather;
 
     public StatusBarHeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -971,5 +971,5 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
                     resolver, Settings.System.STATUS_BAR_SHOW_WEATHER, 1) == 1;
             updateVisibilities();
         }
-    }
+   }
 }
