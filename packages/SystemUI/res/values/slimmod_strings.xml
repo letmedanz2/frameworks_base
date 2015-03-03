@@ -87,5 +87,7 @@
 
     <!-- Brightness tile -->
     <string name="quick_settings_brightness">Brightness</string>
+    <string name="quick_settings_battery_saver">Battery saver</string>
+    <string name="quick_settings_battery_saver_off">Battery saver off</string>
 
 </resources>
