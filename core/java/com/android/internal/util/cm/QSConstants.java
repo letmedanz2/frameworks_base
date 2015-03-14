@@ -44,6 +44,7 @@ public class QSConstants {
     public static final String TILE_BRIGHTNESS = "brightness";
     public static final String TILE_BATTERY_SAVER = "battery_saver";
     public static final String TILE_EXPANDED_DESKTOP = "expanded_desktop";
+    public static final String TILE_SLIMACTION = "slimaction";
 
     public static final String TILE_REBOOT = "reboot";
 
@@ -79,5 +80,6 @@ public class QSConstants {
         TILES_AVAILABLE.add(TILE_BRIGHTNESS);
         TILES_AVAILABLE.add(TILE_BATTERY_SAVER);
         TILES_AVAILABLE.add(TILE_EXPANDED_DESKTOP);
+        TILES_AVAILABLE.add(TILE_SLIMACTION);
     }
 }

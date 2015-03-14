@@ -3180,6 +3180,7 @@ public final class Settings {
          * @hide
          */
         public static final String POWER_MENU_CONFIG = "power_menu_config";
+        public static final String QUICK_TILE_CONFIG = "quick_tile_config";
 
         /**
          * MediaScanner behavior on boot.
