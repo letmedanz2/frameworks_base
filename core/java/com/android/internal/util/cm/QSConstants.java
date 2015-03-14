@@ -41,6 +41,7 @@ public class QSConstants {
     public static final String TILE_REBOOT = "reboot";
     public static final String TILE_SYNC = "sync";
     public static final String TILE_SCREENSHOT = "screenshot";
+    public static final String TILE_BRIGHTNESS = "brightness";
 
     public static final String TILE_REBOOT = "reboot";
 
@@ -70,10 +71,9 @@ public class QSConstants {
         TILES_AVAILABLE.add(TILE_LOCKSCREEN);
         TILES_AVAILABLE.add(TILE_LTE);
         TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);
-
         TILES_AVAILABLE.add(TILE_SCREENSHOT);
         TILES_AVAILABLE.add(TILE_SYNC);
-
         TILES_AVAILABLE.add(TILE_REBOOT);
+        TILES_AVAILABLE.add(TILE_BRIGHTNESS);
     }
 }

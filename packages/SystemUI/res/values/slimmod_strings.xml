@@ -85,4 +85,7 @@
     <string name="select_application">Select application</string>
     <string name="lockscreen_target_empty">Empty</string>
 
+    <!-- Brightness tile -->
+    <string name="quick_settings_brightness">Brightness</string>
+
 </resources>
