@@ -139,6 +139,7 @@ public class QSPanel extends ViewGroup {
             mNumberOfColumns = res.getInteger(R.integer.quick_settings_num_columns);
         }
         return mNumberOfColumns;
+     }
 
      /** 
      * Enable/disable brightness slider.

@@ -308,7 +308,6 @@ public class QSTileHost implements QSTile.Host {
                 return new ExpandedDesktopTile(this);
             case QSConstants.TILE_SLIMACTION:
                 return new SlimActionTile(this);
-            default:
             case QSConstants.TILE_USB_TETHER:
                 return new UsbTetherTile(this);
             default:

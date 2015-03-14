@@ -72,7 +72,4 @@
     <string name="toggle">Toggle</string>
     <string name="shortcut_toggle_title">Action to perform</string>
 
-    <!-- Kill app toast -->
-    <string name="app_killed_message">App Killed</string>
-
 </resources>
