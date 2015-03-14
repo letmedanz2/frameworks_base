@@ -292,6 +292,8 @@ public class QSTileView extends ViewGroup {
             int rad = (int)(mIcon.getHeight() * 1.25f);
             mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
         }
+        final int rad = (int)(mIcon.getHeight() * 1.25f);
+        mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
     }
 
     private static void layout(View child, int left, int top) {
