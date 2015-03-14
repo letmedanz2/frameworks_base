@@ -67,6 +67,8 @@ public class CreateShortcut extends LauncherActivity {
     private Intent mShortcutIntent;
     private Intent mIntent;
 
+    private CharSequence mName = null;
+
     @Override
     protected Intent getTargetIntent() {
         Intent targetIntent = new Intent(Intent.ACTION_MAIN, null);
@@ -93,10 +95,12 @@ public class CreateShortcut extends LauncherActivity {
         mShortcutIntent.setClassName(this, intentClass);
         mShortcutIntent.setAction(intentAction);
 
+        mName = itemForPosition(position).label;
+
         mIntent = new Intent();
         mIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON,
                 BitmapFactory.decodeResource(getResources(), returnIconResId(className)));
-        mIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, itemForPosition(position).label);
+        mIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, mName);
         if (className.equals("ChamberOfSecrets")) {
             showDialogSetting(DLG_SECRET);
         } else if (className.equals("Immersive")
@@ -108,7 +112,9 @@ public class CreateShortcut extends LauncherActivity {
         }
     }
 
-    private int returnIconResId(String c) {
+    private int returnIconResId(String intentClass) {
+        String c = intentClass.substring(intentClass.lastIndexOf(".") + 1);
+
         if (c.equals ("Rotation")) {
             return R.drawable.ic_qs_rotation_unlocked;
         } else if (c.equals("Torch")) {
@@ -398,7 +404,7 @@ public class CreateShortcut extends LauncherActivity {
                     public void onClick(DialogInterface dialog, final int item) {
                         mShortcutIntent.putExtra("value", item);
                         mIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
-                                /*mName + " " + */items[item]);
+                                mName + " " + items[item]);
                         finalizeIntent();
                     }
                 });
