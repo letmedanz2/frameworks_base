@@ -3456,6 +3456,74 @@ public final class Settings {
         public static final String TOAST_ANIMATION = "toast_animation";
 
         /**
+         * Heads Up Notifications
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
+
+        /**
+         * Which applications to disable heads up notifications for
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_CUSTOM_VALUES = "heads_up_custom_values";
+
+        /**
+         * Which applications to disable heads up notifications for
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
+
+        /**
+         * Defines the global heads up notification decay
+         *
+         * @hide
+         */
+        public static final String HEADS_UP_NOTIFCATION_DECAY = "heads_up_notification_decay";
+
+        /**
+         * Whether to display app circle sidebar
+         * @hide
+         */
+        public static final String ENABLE_APP_CIRCLE_BAR = "enable_app_circle_bar";
+
+        /**
+         * A list of packages to include in app circle bar.
+         * This should be a string of packages separated by |
+         * @hide
+         */
+        public static final String WHITELIST_APP_CIRCLE_BAR = "whitelist_app_circle_bar";
+
+        /**
+         * Width of the app circle bar trigger
+         *
+         * @hide
+         */
+        public static final String APP_CIRCLE_BAR_TRIGGER_WIDTH = "app_circle_bar_trigger_width";
+
+        /**
+         * Position of app circle bar trigger
+         *
+         * @hide
+         */
+        public static final String APP_CIRCLE_BAR_TRIGGER_TOP = "app_circle_bar_trigger_top";
+
+        /**
+         * Height of the app circle bar trigger
+         *
+         * @hide
+         */
+        public static final String APP_CIRCLE_BAR_TRIGGER_HEIGHT = "app_circle_bar_trigger_height";
+
+        /**
+         * Whether to display the trigger region or not
+         *
+         * @hide
+         */
+        public static final String APP_CIRCLE_BAR_SHOW_TRIGGER = "app_circle_bar_show_trigger";
+        /**
          * ListView Animations
          * 0 == None
          * 1 == Wave (Left)
@@ -3505,34 +3573,6 @@ public final class Settings {
         public static final String ANIMATION_CONTROLS_DURATION = "animation_controls_duration";
         public static final String ANIMATION_CONTROLS_EXIT_ONLY = "animation_controls_exit_only";
         public static final String ANIMATION_CONTROLS_REVERSE_EXIT = "animation_controls_reverse_exit";		
-
-        /**
-         * Heads Up Notifications
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_NOTIFICATION = "heads_up_enabled";
-
-        /**
-         * Which applications to disable heads up notifications for
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_CUSTOM_VALUES = "heads_up_custom_values";
-
-        /**
-         * Which applications to disable heads up notifications for
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_BLACKLIST_VALUES = "heads_up_blacklist_values";
-
-        /**
-         * Defines the global heads up notification decay
-         *
-         * @hide
-         */
-        public static final String HEADS_UP_NOTIFCATION_DECAY = "heads_up_notification_decay";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
